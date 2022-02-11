@@ -26,7 +26,7 @@ func main() {
 	userController := controllers.NewUserController(userService)
 
 	router := mux.NewRouter()
-	router.HandleFunc("/user", userController.Create)
+	router.HandleFunc("/v1/user", userController.Create)
 
 	http.Handle("/", router)
 	http.ListenAndServe(":8080", nil)

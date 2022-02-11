@@ -12,8 +12,8 @@ type Configuration struct {
 	DB_POOL_SIZE string
 }
 
-func GetEnvironmentConfiguration() Configuration {
-	return Configuration{
+func GetEnvironmentConfiguration() *Configuration {
+	return &Configuration{
 		DB_DRIVER:    os.Getenv("DB_DRIVER"),
 		DB_HOST:      os.Getenv("DB_HOST"),
 		DB_USER:      os.Getenv("DB_USER"),
