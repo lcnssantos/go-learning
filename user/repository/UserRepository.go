@@ -26,28 +26,26 @@ func (this *UserRepository) Create(data dto.CreateUserDto) error {
 	return nil
 }
 
-func (this *UserRepository) FindOneByEmail(email string) (entities.User, error) {
+func (this *UserRepository) FindOneByEmail(email string) (*entities.User, error) {
 	prepare, err := this.database.Prepare("SELECT * FROM users WHERE email = $1 LIMIT 1")
 
 	if err != nil {
-		return entities.User{}, err
+		return nil, err
 	}
 
-	var user = entities.User{}
-
-	user, err = this.scanEntity(prepare.QueryRow(email))
+	user, err := this.scanEntity(prepare.QueryRow(email))
 
 	if err != nil {
-		return entities.User{}, err
+		return nil, err
 	}
 
 	return user, nil
 }
 
-func (this *UserRepository) scanEntity(r *sql.Row) (entities.User, error) {
+func (this *UserRepository) scanEntity(r *sql.Row) (*entities.User, error) {
 	var user = entities.User{}
 	err := r.Scan(&user.Id, &user.Name, &user.Email, &user.EmailConfirmed, &user.Password, &user.IsActive, &user.CreatedAt, &user.UpdatedAt)
-	return user, err
+	return &user, err
 }
 
 func NewUserRepository(database *sql.DB) *UserRepository {

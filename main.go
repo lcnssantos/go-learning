@@ -4,9 +4,7 @@ import (
 	"github.com/gorilla/mux"
 	"log"
 	"main/shared"
-	"main/user/controllers"
-	"main/user/repository"
-	"main/user/services"
+	"main/user"
 	"net/http"
 )
 
@@ -20,14 +18,12 @@ func main() {
 
 	defer db.Close()
 
-	userRepository := repository.NewUserRepository(db)
-	hashService := services.NewHashService()
-	userService := services.NewUserService(userRepository, hashService)
-	userController := controllers.NewUserController(userService)
+	userRouter := user.BuildUserRouter(db)
 
-	router := mux.NewRouter()
-	router.HandleFunc("/v1/user", userController.Create)
+	r := mux.NewRouter()
+	r.Handle("/v1/user", userRouter)
 
-	http.Handle("/", router)
-	http.ListenAndServe(":8080", nil)
+	http.Handle("/", r)
+
+	http.ListenAndServe(":8080", r)
 }

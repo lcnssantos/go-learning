@@ -12,17 +12,17 @@ type UserService struct {
 	hashService *HashService
 }
 
-func (this *UserService) Create(data dto.CreateUserDto) (entities.User, error) {
+func (this *UserService) Create(data dto.CreateUserDto) (*entities.User, error) {
 	_, err := this.repository.FindOneByEmail(data.Email)
 
 	if err == nil {
-		return entities.User{}, errors.New("Email already exist")
+		return nil, errors.New("Email already exist")
 	}
 
 	hash, err := this.hashService.Hash(data.Password)
 
 	if err != nil {
-		return entities.User{}, err
+		return nil, err
 	}
 
 	data.Password = hash
@@ -30,10 +30,14 @@ func (this *UserService) Create(data dto.CreateUserDto) (entities.User, error) {
 	err = this.repository.Create(data)
 
 	if err != nil {
-		return entities.User{}, err
+		return nil, err
 	}
 
 	return this.repository.FindOneByEmail(data.Email)
+}
+
+func (this *UserService) FindOneByEmail(email string) (*entities.User, error) {
+	return this.repository.FindOneByEmail(email)
 }
 
 func NewUserService(userRepository *repository.UserRepository, hashService *HashService) *UserService {
