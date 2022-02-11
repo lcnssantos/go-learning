@@ -3,12 +3,12 @@ package entities
 import "time"
 
 type User struct {
-	Id             string
-	Name           string
-	Email          string
-	EmailConfirmed bool
-	Password       string
-	IsActive       bool
-	CreatedAt      time.Time
-	UpdatedAt      time.Time
+	Id             string    `json:"id"`
+	Name           string    `json:"name"`
+	Email          string    `json:"email"`
+	EmailConfirmed bool      `json:"emailConfirmed"`
+	Password       string    `json:"-"`
+	IsActive       bool      `json:"isActive"`
+	CreatedAt      time.Time `json:"createdAt"`
+	UpdatedAt      time.Time `json:"updatedAt"`
 }

@@ -8,7 +8,8 @@ import (
 )
 
 type UserService struct {
-	repository *repository.UserRepository
+	repository  *repository.UserRepository
+	hashService *HashService
 }
 
 func (this *UserService) Create(data dto.CreateUserDto) (entities.User, error) {
@@ -18,7 +19,7 @@ func (this *UserService) Create(data dto.CreateUserDto) (entities.User, error) {
 		return entities.User{}, errors.New("Email already exist")
 	}
 
-	hash, err := Hash(data.Password)
+	hash, err := this.hashService.Hash(data.Password)
 
 	if err != nil {
 		return entities.User{}, err
@@ -35,6 +36,6 @@ func (this *UserService) Create(data dto.CreateUserDto) (entities.User, error) {
 	return this.repository.FindOneByEmail(data.Email)
 }
 
-func NewUserService(userRepository *repository.UserRepository) *UserService {
-	return &UserService{repository: userRepository}
+func NewUserService(userRepository *repository.UserRepository, hashService *HashService) *UserService {
+	return &UserService{repository: userRepository, hashService: hashService}
 }

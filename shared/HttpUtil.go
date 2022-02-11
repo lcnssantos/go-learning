@@ -6,8 +6,8 @@ import (
 )
 
 type HttpError struct {
-	Status  int
-	Message string
+	Status  int    `json:"status"`
+	Message string `json:"message"`
 }
 
 func ThrowHttpError(w http.ResponseWriter, status int, message string) {

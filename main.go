@@ -21,7 +21,8 @@ func main() {
 	defer db.Close()
 
 	userRepository := repository.NewUserRepository(db)
-	userService := services.NewUserService(userRepository)
+	hashService := services.NewHashService()
+	userService := services.NewUserService(userRepository, hashService)
 	userController := controllers.NewUserController(userService)
 
 	router := mux.NewRouter()
