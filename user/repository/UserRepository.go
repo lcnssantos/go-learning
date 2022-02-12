@@ -48,6 +48,22 @@ func (this *UserRepository) scanEntity(r *sql.Row) (*entities.User, error) {
 	return &user, err
 }
 
+func (this *UserRepository) FindOneById(uid string) (*entities.User, error) {
+	prepare, err := this.database.Prepare("SELECT * FROM users WHERE id = $1 LIMIT 1")
+
+	if err != nil {
+		return nil, err
+	}
+
+	user, err := this.scanEntity(prepare.QueryRow(uid))
+
+	if err != nil {
+		return nil, err
+	}
+
+	return user, nil
+}
+
 func NewUserRepository(database *sql.DB) *UserRepository {
 	return &UserRepository{database: database}
 }

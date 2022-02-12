@@ -40,6 +40,10 @@ func (this *UserService) FindOneByEmail(email string) (*entities.User, error) {
 	return this.repository.FindOneByEmail(email)
 }
 
+func (this *UserService) FindOneById(uid string) (*entities.User, error) {
+	return this.repository.FindOneById(uid)
+}
+
 func NewUserService(userRepository *repository.UserRepository, hashService *HashService) *UserService {
 	return &UserService{repository: userRepository, hashService: hashService}
 }

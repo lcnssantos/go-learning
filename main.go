@@ -3,7 +3,9 @@ package main
 import (
 	"github.com/gorilla/mux"
 	"log"
+	"main/auth"
 	"main/shared"
+	"main/shared/middleware"
 	"main/user"
 	"net/http"
 )
@@ -18,12 +20,13 @@ func main() {
 
 	defer db.Close()
 
-	userRouter := user.BuildUserRouter(db)
-
 	r := mux.NewRouter()
-	r.Handle("/v1/user", userRouter)
+	r.Use(middleware.NewJsonMiddleware().Handler)
+
+	user.BuildUserModule(db, r.PathPrefix("/v1").Subrouter())
+	auth.BuildAuthModule(db, r.PathPrefix("/v1/auth").Subrouter())
 
 	http.Handle("/", r)
 
-	http.ListenAndServe(":8080", r)
+	http.ListenAndServe(":8080", nil)
 }

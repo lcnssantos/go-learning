@@ -10,6 +10,7 @@ type Configuration struct {
 	DB_PORT      string
 	DB_NAME      string
 	DB_POOL_SIZE string
+	JWT_SECRET   string
 }
 
 func GetEnvironmentConfiguration() *Configuration {
@@ -21,5 +22,6 @@ func GetEnvironmentConfiguration() *Configuration {
 		DB_PORT:      os.Getenv("DB_PORT"),
 		DB_NAME:      os.Getenv("DB_NAME"),
 		DB_POOL_SIZE: os.Getenv("DB_POOL_SIZE"),
+		JWT_SECRET:   os.Getenv("JWT_SECRET"),
 	}
 }

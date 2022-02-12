@@ -12,7 +12,7 @@ func (this *HashService) Hash(input string) (string, error) {
 
 func (this *HashService) Compare(hashed string, input string) bool {
 	err := bcrypt.CompareHashAndPassword([]byte(hashed), []byte(input))
-	return err != nil
+	return err == nil
 }
 
 func NewHashService() *HashService {

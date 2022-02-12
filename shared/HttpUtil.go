@@ -16,3 +16,14 @@ func ThrowHttpError(w http.ResponseWriter, status int, message string) {
 	w.Write(answer)
 	return
 }
+
+func SendHttpResponse(w http.ResponseWriter, status int, data any) {
+	response, _ := json.Marshal(data)
+	w.WriteHeader(status)
+	w.Write(response)
+	return
+}
+
+func SetJsonHeader(w http.ResponseWriter) {
+	w.Header().Set("Content-Type", "application/json")
+}
