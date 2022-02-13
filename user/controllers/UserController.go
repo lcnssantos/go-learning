@@ -2,6 +2,7 @@ package controllers
 
 import (
 	"encoding/json"
+	"github.com/go-playground/validator/v10"
 	"main/shared"
 	"main/user/dto"
 	"main/user/services"
@@ -10,22 +11,22 @@ import (
 
 type UserController struct {
 	userService *services.UserService
+	validate    *validator.Validate
 }
 
 func (this *UserController) Create(w http.ResponseWriter, r *http.Request) {
-	var userDto = dto.CreateUserDto{}
+	userDto := &dto.CreateUserDto{}
 
-	err := json.NewDecoder(r.Body).Decode(&userDto)
+	validationErr := shared.HandleValidateRequest(w, r, userDto)
 
-	if err != nil {
-		shared.ThrowHttpError(w, http.StatusBadRequest, "Invalid body request")
+	if validationErr != nil {
 		return
 	}
 
-	user, err := this.userService.Create(userDto)
+	user, creationErr := this.userService.Create(userDto)
 
-	if err != nil {
-		shared.ThrowHttpError(w, http.StatusUnprocessableEntity, err.Error())
+	if creationErr != nil {
+		shared.ThrowHttpError(w, http.StatusUnprocessableEntity, creationErr.Error())
 		return
 	}
 
@@ -34,6 +35,6 @@ func (this *UserController) Create(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(http.StatusCreated)
 }
 
-func NewUserController(userService *services.UserService) *UserController {
-	return &UserController{userService: userService}
+func NewUserController(userService *services.UserService, validate *validator.Validate) *UserController {
+	return &UserController{userService: userService, validate: validate}
 }

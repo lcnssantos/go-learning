@@ -10,7 +10,7 @@ type UserRepository struct {
 	database *sql.DB
 }
 
-func (this *UserRepository) Create(data dto.CreateUserDto) error {
+func (this *UserRepository) Create(data *dto.CreateUserDto) error {
 	prepare, err := this.database.Prepare("INSERT INTO users (name, email, password ) values ($1, $2, $3)")
 
 	if err != nil {

@@ -12,7 +12,7 @@ type UserService struct {
 	hashService *HashService
 }
 
-func (this *UserService) Create(data dto.CreateUserDto) (*entities.User, error) {
+func (this *UserService) Create(data *dto.CreateUserDto) (*entities.User, error) {
 	_, err := this.repository.FindOneByEmail(data.Email)
 
 	if err == nil {

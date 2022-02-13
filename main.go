@@ -1,6 +1,7 @@
 package main
 
 import (
+	"github.com/go-playground/validator/v10"
 	"github.com/gorilla/mux"
 	"log"
 	"main/auth"
@@ -20,10 +21,12 @@ func main() {
 
 	defer db.Close()
 
+	validate := validator.New()
+
 	r := mux.NewRouter()
 	r.Use(middleware.NewJsonMiddleware().Handler)
 
-	user.BuildUserModule(db, r.PathPrefix("/v1").Subrouter())
+	user.BuildUserModule(db, r.PathPrefix("/v1").Subrouter(), validate)
 	auth.BuildAuthModule(db, r.PathPrefix("/v1/auth").Subrouter())
 
 	http.Handle("/", r)
