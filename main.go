@@ -26,7 +26,7 @@ func main() {
 	r := mux.NewRouter()
 	r.Use(middleware.NewJsonMiddleware().Handler)
 
-	user.BuildUserModule(db, r.PathPrefix("/v1").Subrouter(), validate)
+	user.BuildUserModule(db, r.PathPrefix("/v1").Subrouter())
 	auth.BuildAuthModule(db, r.PathPrefix("/v1/auth").Subrouter())
 
 	http.Handle("/", r)

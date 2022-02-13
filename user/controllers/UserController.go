@@ -2,7 +2,6 @@ package controllers
 
 import (
 	"encoding/json"
-	"github.com/go-playground/validator/v10"
 	"main/shared"
 	"main/user/dto"
 	"main/user/services"
@@ -11,7 +10,6 @@ import (
 
 type UserController struct {
 	userService *services.UserService
-	validate    *validator.Validate
 }
 
 func (this *UserController) Create(w http.ResponseWriter, r *http.Request) {
@@ -35,6 +33,6 @@ func (this *UserController) Create(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(http.StatusCreated)
 }
 
-func NewUserController(userService *services.UserService, validate *validator.Validate) *UserController {
-	return &UserController{userService: userService, validate: validate}
+func NewUserController(userService *services.UserService) *UserController {
+	return &UserController{userService: userService}
 }

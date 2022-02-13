@@ -2,7 +2,6 @@ package user
 
 import (
 	"database/sql"
-	"github.com/go-playground/validator/v10"
 	"github.com/gorilla/mux"
 	"main/auth/middlewares"
 	"main/auth/provider"
@@ -12,11 +11,11 @@ import (
 	"main/user/services"
 )
 
-func BuildUserModule(db *sql.DB, router *mux.Router, validate *validator.Validate) {
+func BuildUserModule(db *sql.DB, router *mux.Router) {
 	userRepository := repository.NewUserRepository(db)
 	hashService := services.NewHashService()
 	userService := services.NewUserService(userRepository, hashService)
-	userController := controllers.NewUserController(userService, validate)
+	userController := controllers.NewUserController(userService)
 	meController := controllers.NewMeController(userService)
 	jwtProviderImpl := provider.NewJwtProviderImpl()
 	jwtService := services2.NewJwtService(jwtProviderImpl)
