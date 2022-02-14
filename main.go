@@ -1,17 +1,20 @@
 package main
 
 import (
-	"github.com/go-playground/validator/v10"
-	"github.com/gorilla/mux"
 	"log"
 	"main/auth"
 	"main/shared"
 	"main/shared/middleware"
 	"main/user"
 	"net/http"
+
+	"github.com/gorilla/mux"
+	"github.com/joho/godotenv"
 )
 
 func main() {
+	godotenv.Load(".env")
+
 	db, err := shared.Connect()
 
 	if err != nil {
@@ -20,8 +23,6 @@ func main() {
 	}
 
 	defer db.Close()
-
-	validate := validator.New()
 
 	r := mux.NewRouter()
 	r.Use(middleware.NewJsonMiddleware().Handler)

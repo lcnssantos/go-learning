@@ -30,6 +30,10 @@ func (this *JwtProviderImpl) Decode(tokenString string) (string, string, error) 
 		return []byte(shared.GetEnvironmentConfiguration().JWT_SECRET), nil
 	})
 
+	if err != nil {
+		return "", "", err
+	}
+
 	if claims, ok := token.Claims.(jwt.MapClaims); ok && token.Valid {
 		fmt.Println(claims["foo"], claims["nbf"])
 		return fmt.Sprintf("%v", claims["uid"]), fmt.Sprintf("%v", claims["kind"]), err

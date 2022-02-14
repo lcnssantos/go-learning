@@ -2,8 +2,9 @@ package shared
 
 import (
 	"encoding/json"
-	"github.com/go-playground/validator/v10"
 	"net/http"
+
+	"github.com/go-playground/validator/v10"
 )
 
 type HttpError struct {
@@ -18,7 +19,7 @@ func ThrowHttpError(w http.ResponseWriter, status int, message string) {
 	return
 }
 
-func SendHttpResponse(w http.ResponseWriter, status int, data any) {
+func SendHttpResponse(w http.ResponseWriter, status int, data interface{}) {
 	response, _ := json.Marshal(data)
 	w.WriteHeader(status)
 	w.Write(response)

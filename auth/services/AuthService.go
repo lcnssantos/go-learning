@@ -61,32 +61,31 @@ func (this *AuthService) GetByToken(token string) (*entities.User, error) {
 }
 
 func (this *AuthService) RefreshToken(bearerToken string) (string, string, error) {
-	uid, kind, err := this.jwtService.decode(bearerToken)
+	uid, kind, decodificationErr := this.jwtService.decode(bearerToken)
 
-	if err != nil {
-		return "", "", err
+	if decodificationErr != nil {
+		return "", "", decodificationErr
 	}
 
 	if kind != "refresh" {
 		return "", "", errors.New("invalid bearerToken type")
 	}
 
-	user, err1 := this.userService.FindOneById(uid)
+	user, findUserErr := this.userService.FindOneById(uid)
 
-	if err1 != nil {
-		return "", "", err
+	if findUserErr != nil {
+		return "", "", findUserErr
 	}
 
-	token, err2 := this.CreateToken(user)
+	token, createTokenErr := this.CreateToken(user)
+	refreshToken, createRefreshTokenErr := this.CreateRefreshToken(user)
 
-	if err2 != nil {
-		return "", "", err
+	if createTokenErr != nil {
+		return "", "", createTokenErr
 	}
 
-	refreshToken, err3 := this.CreateRefreshToken(user)
-
-	if err3 != nil {
-		return "", "", err
+	if createRefreshTokenErr != nil {
+		return "", "", decodificationErr
 	}
 
 	return token, refreshToken, nil
