@@ -2,13 +2,14 @@ package user
 
 import (
 	"database/sql"
-	"github.com/gorilla/mux"
 	"main/auth/middlewares"
 	"main/auth/provider"
 	services2 "main/auth/services"
 	"main/user/controllers"
 	"main/user/repository"
 	"main/user/services"
+
+	"github.com/gorilla/mux"
 )
 
 func BuildUserModule(db *sql.DB, router *mux.Router) {

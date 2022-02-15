@@ -2,6 +2,7 @@ package middlewares
 
 import (
 	"context"
+	"errors"
 	"main/auth/services"
 	"main/shared"
 	"net/http"
@@ -31,6 +32,11 @@ func (this *AuthenticationMiddleware) Handler(next http.Handler) http.Handler {
 
 		if err != nil {
 			shared.ThrowHttpError(w, http.StatusUnauthorized, err.Error())
+			return
+		}
+
+		if !user.EmailConfirmed || !user.IsActive {
+			shared.ThrowHttpError(w, http.StatusUnauthorized, errors.New("User not active").Error())
 			return
 		}
 
